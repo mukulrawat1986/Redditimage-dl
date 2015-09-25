@@ -97,6 +97,6 @@ func main() {
     }
 
     for _, item := range items{
-        fmt.Println(item.Title)
+        fmt.Println(item)
     }
 }
