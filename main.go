@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	_"os"
+    "time"
 )
 
 // const url = "https://i.imgur.com/EdcinRv.jpg"
@@ -18,7 +19,6 @@ import (
 type Item struct {
 	Title string
 	URL   string
-    LinkScore int `json:"score"`
 }
 
 type Response struct {
@@ -36,7 +36,7 @@ func (i Item)String() string{
 }
 
 
-func downloadImage(url string) {
+func downloadImage(url string, title string) {
 	// Just a simple GET request to the image URL
 	// We get back a *Response, and an error
 	res, err := http.Get(url)
@@ -45,7 +45,7 @@ func downloadImage(url string) {
 		log.Fatalf("http.Get -> %v", err)
 	}
 
-	fmt.Printf("%v", res.Body)
+//	fmt.Printf("%v", res.Body)
 
 	// We read all the bytes of the image
 	// Types: data []byte
@@ -59,8 +59,13 @@ func downloadImage(url string) {
 	defer res.Body.Close()
 
 	// You can now save it to disk or whatever...
-	log.Println("Saving Image.........")
-	ioutil.WriteFile("Dog.jpg", data, 0666)
+	//log.Println("Saving Image.........")
+    filename := fmt.Sprintf("%s.jpg", title)
+    if title == "bunny"{
+        filename = fmt.Sprintf("%s.png", title)
+    }
+    log.Println("Saving image ", filename)
+	ioutil.WriteFile(filename, data, 0666)
 	log.Println("Image Saved")
 }
 
@@ -100,4 +105,21 @@ func main() {
     for _, item := range items{
         fmt.Println(item)
     }
+
+    // Download first 5 images
+    count := 0
+    for _, item := range items{
+        if item.URL[len(item.URL)-3:] != "jpg"{
+            continue
+        }else{
+            downloadImage(item.URL, item.Title[0:5])
+            count += 1
+        }
+        if count == 5 {
+            break
+        }
+    }
+    time.Sleep(3)
+
+    downloadImage("http://i.imgur.com/GQcvWqx.jpg", "bunny")
 }
