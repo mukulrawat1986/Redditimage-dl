@@ -28,6 +28,13 @@ type Response struct {
 	}
 }
 
+// Add a string method to our Item type so that it implements the Stringer interface
+// and makes it easier for us to print
+func (i item)String() string{
+    return fmt.Sprintf("%s\n%s", i.Title, i.URL)
+}
+
+
 func downloadImage(url string) {
 	// Just a simple GET request to the image URL
 	// We get back a *Response, and an error
