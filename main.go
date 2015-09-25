@@ -18,6 +18,7 @@ import (
 type Item struct {
 	Title string
 	URL   string
+    LinkScore int `json:"score"`
 }
 
 type Response struct {
